@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-
-# import the python renderman library
 import prman
 
 # create a simple checker pattern
@@ -14,6 +12,31 @@ if( fmod( $c, 2.0 ) < 1.0 )
 $colour
 """
 
+def darkCeramicShader() :
+    ri.Bxdf(
+        "PxrSurface", 
+        "ceramic",
+        {
+            "color diffuseColor": [110/255, 93/255, 77/255], 
+            "float diffuseGain": 1.0, 
+            "float diffuseRoughness": 0.1,
+            "float diffuseExponent" : 50
+        }
+    )
+
+def clearCeramicShader() :
+    ri.Bxdf(
+        "PxrSurface",
+        "clearCeramic",
+        {
+            "color diffuseColor": [223/255, 232/255, 227/255],
+            "float diffuseGain": 1.0, 
+            "float diffuseRoughness": 0.1,
+            "float diffuseExponent" : 50,
+            "color clearcoatEdgeColor": [0.4, 0.4, 0.4]
+        },
+    )
+
 def mugsHandle(ri):
     ri.ArchiveRecord(ri.COMMENT, 'handle')
     ri.TransformBegin()
@@ -24,16 +47,7 @@ def mugsHandle(ri):
     ri.Rotate(90,0,0,1)
     ri.Scale(0.8, 1.8, 1)
 
-    #  --- DARK CERAMIC SHADER
-    ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 0, 1], "string expression": [expr]})
-    ri.Bxdf(
-        "PxrDiffuse",
-        "diffuse",
-        {
-            #  'color diffuseColor'  : [1,0,0]
-            "reference color diffuseColor": ["seTexture:resultRGB"]
-        },
-    )
+    darkCeramicShader
     ri.Torus(4.3, 0.8, 0, 360, -90)
 
     ri.Scale(-1, -1, 1)
@@ -47,6 +61,7 @@ def mugsHandle(ri):
             "reference color diffuseColor": ["seTexture:resultRGB"]
         },
     )
+
     ri.Torus(4.3, 0.8, 0, 360, 90)
     ri.TransformEnd()
 
@@ -56,33 +71,16 @@ def mugsBottomSupport(ri):
     ri.Translate(0, 0, -4.31)
     ri.ArchiveRecord(ri.COMMENT, 'bottom_suport_oustide')
 
-    # --- DARK CERAMIC SHADER
-    ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 0, 1], "string expression": [expr]})
-    ri.Bxdf(
-        "PxrDiffuse",
-        "diffuse",
-        {
-            #  'color diffuseColor'  : [1,0,0]
-            "reference color diffuseColor": ["seTexture:resultRGB"]
-        },
-    )
-    ri.Paraboloid(5.06, 4.8, 4.0, 360)
+    darkCeramicShader()
+    ri.Paraboloid(5.06, 4.8, 4.0, -360)
 
     # ----- INSIDE ------
     ri.ArchiveRecord(ri.COMMENT, 'bottom_suport_inside')
 
     # --- CLEAN CERAMIC SHADER
-    ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 1, 0], "string expression": [expr]})
-    ri.Bxdf(
-        "PxrDiffuse",
-        "diffuse",
-        {
-            #  'color diffuseColor'  : [1,0,0]
-            "reference color diffuseColor": ["seTexture:resultRGB"]
-        },
-    )
-    ri.Paraboloid(4.8, 4.9, 4.1, 360)
-    ri.Disk(4.3, 4.8, 360)
+    clearCeramicShader()
+    ri.Paraboloid(5.03, 4.9, 4.1, 360)
+    ri.Disk(4.4, 4.8, 360)
     ri.TransformEnd()
 
     # ----- BOTTOM ------
@@ -91,29 +89,21 @@ def mugsBottomSupport(ri):
     ri.TransformBegin()
     ri.Scale(1,1,0.1)
     ri.Translate(0,0,-2.8)
+
     # --- CERAMIC SHADER
-    ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0, 1, 1]})
+    ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0.95, 0.95, 0.95]})
     ri.Torus(4.33, 0.3, 0, -180, 360)
     ri.TransformEnd()
 
     ri.TransformBegin()
-    # --- DARK CERAMIC SHADER
-    ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 0, 1], "string expression": [expr]})
-    ri.Bxdf(
-        "PxrDiffuse",
-        "diffuse",
-        {
-            #  'color diffuseColor'  : [1,0,0]
-            "reference color diffuseColor": ["seTexture:resultRGB"]
-        },
-    )
-    ri.Translate(0,0,-0.34)
-    ri.Sphere(3.9,0,0.4,360)
+    darkCeramicShader()
+    ri.Translate(0,0,-0.28)
+    ri.Sphere(4,0,0.4,-360)
     ri.TransformEnd()
 
     ri.TransformBegin()
     ri.Translate(0,0,-0.2)
-    ri.Disk(0, 4, 360)
+    ri.Disk(0, 4, -360)
     ri.TransformEnd()
 
 def mugsMainCylinder(ri) :
@@ -133,45 +123,27 @@ def mugsMainCylinder(ri) :
         },
     )
 
-    ri.Cylinder(5, 4.5, 12, 360)
+    ri.Cylinder(5, 4.5, 14, 360)
 
     # ----- INSIDE ------
     ri.Attribute("identifier", {"name": "inside"})
 
     # --- CLEAN CERAMIC SHADER
-    ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 1, 0], "string expression": [expr]})
-    ri.Bxdf(
-        "PxrDiffuse",
-        "diffuse",
-        {
-            #  'color diffuseColor'  : [1,0,0]
-            "reference color diffuseColor": ["seTexture:resultRGB"]
-        },
-    )
-    ri.Cylinder(4.8, 0.5, 11.95, 360)
+    clearCeramicShader()
+    ri.Cylinder(4.8, 0.5, 13.95, -360)
 
     # ----- OUTSIDE - BOTTOM ------
     ri.Attribute("identifier", {"name": "bottom"})
 
-    # --- DARK CERAMIC SHADER
-    ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 0, 1], "string expression": [expr]})
-    ri.Bxdf(
-        "PxrDiffuse",
-        "diffuse",
-        {
-            #  'color diffuseColor'  : [1,0,0]
-            "reference color diffuseColor": ["seTexture:resultRGB"]
-        },
-    )
-    ri.Cylinder(5.05, 0.5, 4.5, 360)
+    darkCeramicShader()
+    ri.Cylinder(5.05, 0.47, 4.5, 360)
     ri.TransformEnd()
 
     # ----- TOP EDGE ------
     ri.TransformBegin()
-    ri.Translate(0, 0, 11.95)
+    ri.Translate(0, 0, 13.95)
     # --- CLEAN CERAMIC SHADER
-    ri.Attribute("identifier", {"name": "inside_top_edge"})
-    ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0, 1, 0]})
+    clearCeramicShader()
     ri.Torus(4.9, 0.1, 0, 180, 360)
     ri.TransformEnd()
 
@@ -185,19 +157,19 @@ def mugsMainCylinder(ri) :
     ri.TransformEnd()
 
 def scene(ri) :
-    
+
     # MUG POSITION
 
     ri.TransformBegin()
-    ri.Translate(0, -1, 4)
-    ri.Rotate(-110, 1, 0, 0)
-    # ri.Rotate(90, 0, 0, 1)
-    # ri.Rotate(45, 0, 1, 0)
+    ri.Translate(0, -0.6, 4)
+    ri.Rotate(-90, 1, 0, 0)
+    ri.Rotate(90, 0, 0, 1)
+    ri.Rotate(15, 0, 1, 0)
     ri.Scale(0.1,0.1,0.1)
 
     mugsMainCylinder(ri)
     mugsBottomSupport(ri)
-    mugsHandle(ri)
+    # mugsHandle(ri)
     
     ri.TransformEnd()
 
@@ -211,7 +183,7 @@ if __name__ == '__main__':
     ri.Begin("__render")
     ri.Display("mug.exr", "it", "rgba")
     ri.Format(1920, 1080, 1)
-    ri.Projection(ri.PERSPECTIVE, {ri.FOV: 48})
+    ri.Projection(ri.PERSPECTIVE, {ri.FOV: 38})
     ri.DepthOfField(2.2,0.055,5)
     
 	##Update render type to apply shadows.
