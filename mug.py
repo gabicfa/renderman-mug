@@ -55,8 +55,11 @@ ri.TransformEnd()
 # end lighting
 #######################################################################
 
-ri.Translate(0, -5.5, 30)
-ri.Rotate(-110, 1, 0, 0)
+ri.Translate(0, -1.5, 30)
+ri.Rotate(-90, 1, 0, 0)
+# ri.Rotate(90, 0, 0, 1)
+# ri.Rotate(90, 0, 1, 0)
+
 
 ri.TransformBegin()
 ri.Attribute("identifier", {"name": "top"})
@@ -105,14 +108,8 @@ ri.Torus(5, 0.13, 0, 180, 360)
 ri.TransformEnd()
 
 ri.TransformBegin()
-ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0, 1, 1]})
-points = [0, -10, 30, -1, -0.5, 1, 2, 0.5, 1, 1, 0, -1]
-width = [1, 4]
-# ri.Curves("cubic", [4], "nonperiodic", {ri.P: points, ri.WIDTH: width})
-ri.TransformEnd()
-
-ri.TransformBegin()
 ri.Translate(0, 0, -4.31)
+ri.Attribute("identifier", {"name": "bottom_suport"})
 ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 0, 1], "string expression": [expr]})
 ri.Bxdf(
     "PxrDiffuse",
@@ -125,6 +122,30 @@ ri.Bxdf(
 ri.Paraboloid(5.06, 4.8, 4.0, 360)
 # ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0, 1, 1]})
 ri.Disk(4, 4.6, 360)
+ri.TransformEnd()
+
+ri.TransformBegin()
+ri.Rotate(-90,1,0,0)
+ri.Translate(5,-5.4,0)
+ri.Scale(0.3, 1.2, 1.2)
+ri.Scale(2, 1, 1)
+
+ri.Rotate(90,0,0,1)
+# ri.Rotate(7,0,0,1)
+ri.Scale(0.8, 1, 1)
+
+
+# ri.Pattern("PxrSeExpr", "seTexture", {"color c1": [1, 1, 1], "color c2": [0, 0, 1], "string expression": [expr]})
+# ri.Bxdf(
+#     "PxrDiffuse",
+#     "diffuse",
+#     {
+#         #  'color diffuseColor'  : [1,0,0]
+#         "reference color diffuseColor": ["seTexture:resultRGB"]
+#     },
+# )
+ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0, 1, 1]})
+ri.Torus(4.3, 0.8, 0, 360, -90)
 ri.TransformEnd()
 
 ri.WorldEnd()
