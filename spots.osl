@@ -1,5 +1,6 @@
 surface spots (
-        color Cin=1,
+    color baseColor = color(1, 0, 0),
+    color spotsColor = color(0,0,0),
 output  color Cout=1
 )
 {
@@ -7,16 +8,16 @@ output  color Cout=1
     float s=mod(u*repeatCount,1);
     float t=mod(v*repeatCount,1);
 
-    if((float)noise("perlin",u*repeatCount,v*repeatCount)>0.6){
-	    float fuzz=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.1;
+    if((float)noise("perlin",u*repeatCount,v*repeatCount)>0.7){
+	    float fuzz=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.01;
         point centre=point (0.5,0.5,0);
         point here=point (s,t,0);
         float dist=distance(centre,here);
         float radius=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.3;
-        color myColor=(color) 0;
+        color myColor= spotsColor;
         float inDisk=1-smoothstep(radius-fuzz,radius+fuzz,dist);
-        Cout=mix(Cin,myColor,inDisk);
+        Cout=mix(baseColor,myColor,inDisk);
     }
     else
-	    Cout=(color) 1;
+	    Cout=baseColor;
 }

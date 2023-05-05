@@ -4,34 +4,21 @@ import prman
 # import the python functions
 import sys, os.path, subprocess
 
-# create a simple checker pattern
-expr = """
-$colour = c1;
-$c = floor( 10 * $u ) +floor( 10 * $v );
-if( fmod( $c, 2.0 ) < 1.0 )
-{
-	$colour=c2;
-}
-$colour
-"""
-
 def spotCeramicShader() :
-    ri.Pattern("spots", "spots", {})
+    baseColor = [colorConverter(207), colorConverter(203), colorConverter(194)]
+    spotsColor = (0,0,0)
+    ri.Pattern("spots", "spots", {
+        'color baseColor' : baseColor,
+        'color spotsColor' : spotsColor
+    })
     ri.Bxdf(
-        "PxrSurface", "plastic", {"reference color diffuseColor": ["spots:Cout"], "int diffuseDoubleSided": [1]}
-    )
-    
-    # ri.Bxdf(
-    #     "PxrSurface", 
-    #     "ceramic",
-    #     {
-    #         'reference color diffuseColor' : ['dots:result'],
-    #         # "color diffuseColor": [207/255, 203/255, 194/255], 
-    #         "float diffuseGain": 1.0, 
-    #         "float diffuseRoughness": 0.1,
-    #         "float diffuseExponent" : 50
-    #     }
-    # )
+        "PxrSurface", "with_spots", {
+            "reference color diffuseColor": ["spots:Cout"], 
+            "int diffuseDoubleSided": [1],
+            "float diffuseGain": 1.0, 
+            "float diffuseRoughness": 0.1,
+            "float diffuseExponent" : 50
+    })
 
 def darkCeramicShader() :
     ri.Bxdf(
@@ -73,8 +60,6 @@ function to check if shader exists and compile it, we assume that the shader
 is .osl and the compiled shader is .oso If the shader source is newer than the
 compiled shader we will compile it. It also assumes that oslc is in the path.
 """
-
-
 def checkAndCompileShader(shader):
     if (
         os.path.isfile(shader + ".oso") != True
@@ -85,6 +70,9 @@ def checkAndCompileShader(shader):
             subprocess.check_call(["oslc", shader + ".osl"])
         except subprocess.CalledProcessError:
             sys.exit("shader compilation failed")
+
+def colorConverter(colourValue) :
+	return colourValue / 255
 
 def mugsHandle(ri):
     ri.ArchiveRecord(ri.COMMENT, 'handle')
@@ -100,7 +88,6 @@ def mugsHandle(ri):
     ri.Torus(4.3, 0.8, 0, 360, -90)
 
     spotCeramicShader()
-
     ri.Torus(4.3, 0.8, 0, 360, 90)
     ri.TransformEnd()
 
@@ -136,11 +123,11 @@ def mugsBottomSupport(ri):
     darkCeramicShader()
     ri.Translate(0,0,-0.29)
     ri.Scale(1,1,0.2)
-    ri.Sphere(4.1,0,1,-360)
+    ri.Sphere(4.1,0,2.2,-360)
     ri.TransformEnd()
 
     ri.TransformBegin()
-    ri.Disk(0.15, 3.7, -360)
+    ri.Disk(0.15, 4, -360)
     ri.TransformEnd()
 
 def mugsMainCylinder(ri) :
@@ -185,10 +172,10 @@ def scene(ri) :
     # MUG POSITION
 
     ri.TransformBegin()
-    ri.Translate(0, -0.5, 4)
-    ri.Rotate(-110, 1, 0, 0)
+    ri.Translate(0, -0.6, 4)
+    ri.Rotate(-90, 1, 0, 0)
     ri.Rotate(90, 0, 0, 1)
-    # ri.Rotate(90, 0, 1, 0)
+    # ri.Rotate(-90, 0, 1, 0)
     ri.Scale(0.1,0.1,0.1)
 
     mugsMainCylinder(ri)
