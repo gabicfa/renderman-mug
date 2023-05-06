@@ -4,57 +4,8 @@ import prman
 # import the python functions
 import sys, os.path, subprocess
 
-def spotCeramicShader() :
-    baseColor = [colorConverter(207), colorConverter(203), colorConverter(194)]
-    spotsColor = (0,0,0)
-    ri.Pattern("spots", "spots", {
-        'color baseColor' : baseColor,
-        'color spotsColor' : spotsColor
-    })
-    ri.Bxdf(
-        "PxrSurface", "with_spots", {
-            "reference color diffuseColor": ["spots:Cout"], 
-            "int diffuseDoubleSided": [1],
-            "float diffuseGain": 1.0, 
-            "float diffuseRoughness": 0.1,
-            "float diffuseExponent" : 50
-    })
-
-def darkCeramicShader() :
-    ri.Bxdf(
-        "PxrSurface", 
-        "ceramic",
-        {
-            "color diffuseColor": [110/255, 93/255, 77/255], 
-            "float diffuseGain": 1.0, 
-            "float diffuseRoughness": 0.1,
-            "float diffuseExponent" : 50
-        }
-    )
-
-def clearCeramicShader() :
-    # ri.Bxdf(
-    #     "PxrSurface",
-    #     "clearCeramic",
-    #     {
-    #         # "color diffuseColor" : [.2,.5,.8], 
-    #         "color diffuseColor": [223/255, 232/255, 227/255],
-    #         "float diffuseGain": 1.0, 
-    #         # "float diffuseRoughness": 0.1,
-    #         # "float diffuseExponent" : 50,
-    #         "color clearcoatEdgeColor": [1, 1, 1],
-    #     },
-    # )
-    ri.Bxdf('PxrDisney','glow inside',
-    {
-        'color baseColor' : [223/255, 232/255, 227/255], 
-        'float specular' : [1], 
-        'float specularTint' : [0], 
-        'float anisotropic' : [1], 
-        'float sheenTint' : [.5], 
-        'float clearcoat' : [1]
-    })
-
+from shaders import darkCeramicShader, clearCeramicShader, spotCeramicShader
+from handle import mugsHandle
 """
 function to check if shader exists and compile it, we assume that the shader
 is .osl and the compiled shader is .oso If the shader source is newer than the
@@ -71,25 +22,22 @@ def checkAndCompileShader(shader):
         except subprocess.CalledProcessError:
             sys.exit("shader compilation failed")
 
-def colorConverter(colourValue) :
-	return colourValue / 255
+# def mugsHandle(ri):
+#     ri.ArchiveRecord(ri.COMMENT, 'handle')
+#     ri.TransformBegin()
+#     ri.Rotate(-90,1,0,0)
+#     ri.Translate(4.9,-6.4,0)
+#     ri.Scale(0.2, 1.2, 1.2)
+#     ri.Scale(2, 1, 1)
+#     ri.Rotate(90,0,0,1)
+#     ri.Scale(0.8, 1.8, 1)
 
-def mugsHandle(ri):
-    ri.ArchiveRecord(ri.COMMENT, 'handle')
-    ri.TransformBegin()
-    ri.Rotate(-90,1,0,0)
-    ri.Translate(4.9,-6.4,0)
-    ri.Scale(0.2, 1.2, 1.2)
-    ri.Scale(2, 1, 1)
-    ri.Rotate(90,0,0,1)
-    ri.Scale(0.8, 1.8, 1)
+#     darkCeramicShader(ri)
+#     ri.Torus(4.3, 0.8, 0, 360, -90)
 
-    darkCeramicShader()
-    ri.Torus(4.3, 0.8, 0, 360, -90)
-
-    spotCeramicShader()
-    ri.Torus(4.3, 0.8, 0, 360, 90)
-    ri.TransformEnd()
+#     spotCeramicShader(ri)
+#     ri.Torus(4.3, 0.8, 0, 360, 90)
+#     ri.TransformEnd()
 
 def mugsBottomSupport(ri):
     # ----- OUTSIDE ------
@@ -97,12 +45,12 @@ def mugsBottomSupport(ri):
     ri.Translate(0, 0, -4.31)
     ri.ArchiveRecord(ri.COMMENT, 'bottom_suport_oustide')
 
-    darkCeramicShader()
+    darkCeramicShader(ri)
     ri.Paraboloid(5.06, 4.8, 4.0, -360)
 
     # ----- INSIDE ------
     ri.ArchiveRecord(ri.COMMENT, 'bottom_suport_inside')
-    clearCeramicShader()
+    clearCeramicShader(ri)
     ri.Paraboloid(5.05, 5.3, 4.1, 360)
     ri.Disk(4.5, 4.9, 360)
     ri.TransformEnd()
@@ -120,7 +68,7 @@ def mugsBottomSupport(ri):
     ri.TransformEnd()
 
     ri.TransformBegin()
-    darkCeramicShader()
+    darkCeramicShader(ri)
     ri.Translate(0,0,-0.29)
     ri.Scale(1,1,0.2)
     ri.Sphere(4.1,0,2.2,-360)
@@ -134,28 +82,30 @@ def mugsMainCylinder(ri) :
     # ----- OUTSIDE - TOP ------
     ri.TransformBegin()
     ri.Attribute("identifier", {"name": "top"})
- 
-    spotCeramicShader()
+    ri.Scale(1,1,1.05)
+
+    ri.TransformBegin()
+    spotCeramicShader(ri, 100)
 
     ri.Cylinder(5, 4.5, 14, 360)
 
     # ----- INSIDE ------
     ri.Attribute("identifier", {"name": "inside"})
 
-    clearCeramicShader()
+    clearCeramicShader(ri)
     ri.Cylinder(4.8, 0.5, 13.95, -360)
 
     # ----- OUTSIDE - BOTTOM ------
     ri.Attribute("identifier", {"name": "bottom"})
 
-    darkCeramicShader()
+    darkCeramicShader(ri)
     ri.Cylinder(5.05, 0.45, 4.5, 360)
     ri.TransformEnd()
 
     # ----- TOP EDGE ------
     ri.TransformBegin()
     ri.Translate(0, 0, 13.95)
-    clearCeramicShader()
+    clearCeramicShader(ri)
     ri.Torus(4.9, 0.1, 0, 180, 360)
     ri.TransformEnd()
 
@@ -163,31 +113,33 @@ def mugsMainCylinder(ri) :
     ri.TransformBegin()
     ri.Translate(0, 0, 4.424)
     ri.Attribute("identifier", {"name": "middle_texture"})
-    spotCeramicShader()
+    spotCeramicShader(ri, 100)
     ri.Torus(4.95, 0.1, 0, 180, 360)
     ri.TransformEnd()
-
+    ri.TransformEnd()
+ 
 def scene(ri) :
 
     # MUG POSITION
 
     ri.TransformBegin()
-    ri.Translate(0, -0.6, 4)
-    ri.Rotate(-90, 1, 0, 0)
-    ri.Rotate(90, 0, 0, 1)
+    ri.Translate(0, -0.7, 4)
+    ri.Rotate(-110, 1, 0, 0)
+    ri.Rotate(-100, 0, 0, 1)
     # ri.Rotate(-90, 0, 1, 0)
     ri.Scale(0.1,0.1,0.1)
 
-    mugsMainCylinder(ri)
+    
+    mugsMainCylinder(ri) 
     mugsBottomSupport(ri)
-    # mugsHandle(ri)
+    mugsHandle(ri)
     
     ri.TransformEnd()
 
 if __name__ == '__main__':
     checkAndCompileShader("spots")
 
-    ri = prman.Ri()  # create an instance of the RenderMan interface
+    ri = prman.Ri()  # create an instance of the RenderMan interface 
     ri.Option("rib", {"string asciistyle": "indented"})
 
     filename = "mug.rib"

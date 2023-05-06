@@ -1,10 +1,10 @@
 surface spots (
     color baseColor = color(1, 0, 0),
     color spotsColor = color(0,0,0),
+    float repeatCount = 100,
 output  color Cout=1
 )
 {
-    float repeatCount=100;
     float s=mod(u*repeatCount,1);
     float t=mod(v*repeatCount,1);
 
