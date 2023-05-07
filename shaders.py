@@ -4,7 +4,7 @@ import prman
 def spotCeramicShader(ri, repeatCount = 150, pointProbability = 0.6) :
     baseColor = [colorConverter(207), colorConverter(203), colorConverter(194)]
     spotsColor = [colorConverter(26), colorConverter(26), colorConverter(23)]
-    ri.Pattern("spots", "spots", {
+    ri.Pattern("spotsCeramic", "spotsCeramic", {
         'color baseColor' : baseColor,
         'color spotsColor' : spotsColor,
         'float repeatCount': repeatCount,
@@ -12,11 +12,12 @@ def spotCeramicShader(ri, repeatCount = 150, pointProbability = 0.6) :
     })
     ri.Bxdf(
         "PxrSurface", "with_spots", {
-            "reference color diffuseColor": ["spots:Cout"], 
+            "reference color diffuseColor": ["spotsCeramic:Cout"], 
             "int diffuseDoubleSided": [1],
             "float diffuseGain": 1.0, 
             "float diffuseRoughness": 0.1,
-            "float diffuseExponent" : 50
+            "float diffuseExponent" : 50,
+            "color clearcoatEdgeColor": [1, 1, 1]
     })
 
 def darkCeramicShader(ri) :
@@ -27,7 +28,8 @@ def darkCeramicShader(ri) :
             "color diffuseColor": [colorConverter(110), colorConverter(93), colorConverter(77)], 
             "float diffuseGain": 1.0, 
             "float diffuseRoughness": 0.1,
-            "float diffuseExponent" : 50
+            "float diffuseExponent" : 50,
+            "color clearcoatEdgeColor": [1, 1, 1]
         }
     )
 
@@ -54,5 +56,14 @@ def clearCeramicShader(ri) :
         'float clearcoat' : [1]
     })
 
+def table(ri) :
+    ri.Pattern('wood','wood', {})
+    ri.Bxdf('PxrSurface', 'woodtable',
+	{
+		'reference color diffuseColor' : ['wood:Cout'],
+        "float diffuseGain": 1.0, 
+        "float diffuseRoughness": 0.3,
+        "float diffuseExponent" : 30
+	})
 def colorConverter(colourValue) :
 	return colourValue / 255

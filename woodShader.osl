@@ -1,0 +1,7 @@
+shader wood(
+	color Cin=1,
+	output	color Cout=0
+)
+{
+    Cout=(color)texture("wood.tex",u,v);
+}

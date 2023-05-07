@@ -5,7 +5,8 @@ import prman
 import sys, os.path, subprocess
 import ProcessCommandLine as cl
 
-from mug import mugsHandle, mugsMainCylinder, mugsBottomSupport
+from mug import Mug
+from table import Table
 
 def checkAndCompileShader(shader):
     if (
@@ -20,27 +21,33 @@ def checkAndCompileShader(shader):
  
 def scene(ri) :
 
-    # MUG POSITION
     ri.TransformBegin()
-    ri.Translate(0, -0.7, 3.5)
-    ri.Rotate(-110, 1, 0, 0)
-    ri.Rotate(-100, 0, 0, 1)
-    # ri.Rotate(-90, 0, 1, 0)
-    ri.Scale(0.1,0.1,0.1)
+    ri.Translate(-0.5, -0.5, 2.3)
+    ri.Rotate(-95, 1, 0, 0)
 
-    mugsMainCylinder(ri) 
-    mugsBottomSupport(ri)
-    mugsHandle(ri)
-    
+    ri.TransformBegin()
+    Mug(ri)
+    ri.TransformEnd()
+
+    ri.TransformBegin()
+    Table(ri)
+    ri.TransformEnd()
+
     ri.TransformEnd()
     
 def lighting(ri):
     ri.TransformBegin()
     ri.AttributeBegin()
     ri.Declare("domeLight", "string")
-    ri.Rotate(-90,1,0,0)
-    ri.Rotate(180,0,0,1)
-    ri.Light("PxrDomeLight", "hdrLight", {"string lightColorMap": "Luxo-Jr_4000x2000.tex"})
+    ri.Rotate(265,1,0,0)
+    ri.Rotate(-80,0,0,1)
+    ri.Scale(1,-1,1)
+    ri.Light("PxrDomeLight", 
+        "hdrLight", {
+            "string lightColorMap": "kitchen.tex",
+            "float intensity": 1,
+            "float exposure": 0
+        })
     ri.AttributeEnd()
     ri.TransformEnd()
 
@@ -79,7 +86,7 @@ def displaySetUpForDenoise(ri, openProgram = "it"):
     ri.DisplayChannel("vector forward", {"string source": "vector motionFore"})
     ri.DisplayChannel("vector backward", {"string source": "vector motionBack"})
     ri.Display(
-        "mug.exr",
+        "__main__.exr",
         openProgram,
         "Ci,a,mse,albedo,albedo_var,diffuse,diffuse_mse,specular,specular_mse,zfiltered,zfiltered_var,normal,normal_var,forward,backward",
         {"int asrgba": [1]},
@@ -97,7 +104,8 @@ def main(
     integratorParams={},
     openProgram = "it"
 ):
-    checkAndCompileShader("spots")
+    checkAndCompileShader("spotsCeramicShader")
+    checkAndCompileShader("woodShader")
     print("shading rate {} pivel variance {} using {} {}".format(shadingrate, pixelvar, integrator, integratorParams))
     
     ri = prman.Ri()
@@ -111,11 +119,14 @@ def main(
     ri.Integrator(integrator, "integrator", integratorParams)
     ri.ShadingRate(shadingrate)
     ri.PixelVariance(pixelvar)
-    ri.Projection(ri.PERSPECTIVE, {ri.FOV: fov})
-    ri.DepthOfField(2.2,0.055,5)
+    ri.Projection(ri.PERSPECTIVE, {ri.FOV: 50})
+    ri.DepthOfField(2.2,0.055,2.5)
     
     ri.WorldBegin()
     ri.TransformBegin()
+    ri.Translate(1,-1,1)
+    ri.Rotate(-15,1,0,0)
+    ri.Rotate(-10,0,1,0)
     lighting(ri)
     scene(ri)
     ri.TransformEnd()
@@ -124,7 +135,7 @@ def main(
     ri.End()
 
 if __name__ == '__main__':
-    cl.ProcessCommandLine("mug.rib")
+    cl.ProcessCommandLine("__main__.rib")
     main(
         cl.filename,
         cl.args.shadingrate,
