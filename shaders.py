@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 import prman
 
-def colorConverter(colourValue) :
-	return colourValue / 255
-
-def spotCeramicShader(ri, repeatCount = 100) :
+def spotCeramicShader(ri, repeatCount = 150) :
     baseColor = [colorConverter(207), colorConverter(203), colorConverter(194)]
-    spotsColor = (0,0,0)
+    spotsColor = [colorConverter(26), colorConverter(26), colorConverter(23)]
     ri.Pattern("spots", "spots", {
         'color baseColor' : baseColor,
         'color spotsColor' : spotsColor,
@@ -55,3 +52,6 @@ def clearCeramicShader(ri) :
         'float sheenTint' : [.5], 
         'float clearcoat' : [1]
     })
+
+def colorConverter(colourValue) :
+	return colourValue / 255
