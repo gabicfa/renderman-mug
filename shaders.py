@@ -44,7 +44,7 @@ def clearCeramicShader(ri) :
     #         "color clearcoatEdgeColor": [1, 1, 1],
     #     },
     # )
-    ri.Bxdf('PxrDisney','glow inside',
+    ri.Bxdf('PxrDisney','glowinside',
     {
         'color baseColor' : [223/255, 232/255, 227/255], 
         'float specular' : [1], 
