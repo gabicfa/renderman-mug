@@ -5,6 +5,7 @@ surface spots
 param	color	baseColor	1 0 0		%read{33,34} %write{2147483647,-1}
 param	color	spotsColor	0 0 0		%read{28,28} %write{2147483647,-1}
 param	float	repeatCount	100		%read{0,25} %write{2147483647,-1}
+param	float	pointProbability	0.600000024		%read{15,15} %write{2147483647,-1}
 oparam	color	Cout	1 1 1		%read{2147483647,-1} %write{33,34}
 global	float	u	%read{0,24} %write{2147483647,-1}
 global	float	v	%read{6,25} %write{2147483647,-1}
@@ -31,25 +32,24 @@ temp	float	$tmp9	%read{15,15} %write{14,14}
 const	string	$const4	"perlin"		%read{14,26} %write{2147483647,-1}
 temp	float	$tmp10	%read{14,14} %write{12,12}
 temp	float	$tmp11	%read{14,14} %write{13,13}
-const	float	$const5	0.699999988		%read{15,15} %write{2147483647,-1}
 temp	int	$tmp12	%read{16,16} %write{15,15}
 temp	float	$tmp13	%read{20,20} %write{19,19}
 temp	float	$tmp14	%read{19,19} %write{17,17}
 temp	float	$tmp15	%read{19,19} %write{18,18}
-const	float	$const6	0.0500000007		%read{20,20} %write{2147483647,-1}
-const	point	$const7	0.5 0.5 0		%read{21,21} %write{2147483647,-1}
-const	float	$const9	0		%read{22,22} %write{2147483647,-1}
+const	float	$const5	0.0500000007		%read{20,20} %write{2147483647,-1}
+const	point	$const6	0.5 0.5 0		%read{21,21} %write{2147483647,-1}
+const	float	$const8	0		%read{22,22} %write{2147483647,-1}
 temp	float	$tmp16	%read{27,27} %write{26,26}
 temp	float	$tmp17	%read{26,26} %write{24,24}
 temp	float	$tmp18	%read{26,26} %write{25,25}
-const	float	$const10	0.800000012		%read{27,27} %write{2147483647,-1}
+const	float	$const9	0.800000012		%read{27,27} %write{2147483647,-1}
 temp	float	$tmp19	%read{32,32} %write{31,31}
 temp	float	$tmp20	%read{31,31} %write{29,29}
 temp	float	$tmp21	%read{31,31} %write{30,30}
 code ___main___
-# spots.osl:8
+# spots.osl:9
 #     float s=mod(u*repeatCount,1);
-	mul		$tmp1 u repeatCount 	%filename{"spots.osl"} %line{8} %argrw{"wrr"}
+	mul		$tmp1 u repeatCount 	%filename{"spots.osl"} %line{9} %argrw{"wrr"}
 	functioncall	$const3 6 	%argrw{"r"}
 # /opt/pixar/RenderManProServer-24.4/lib/osl/include/stdosl.h:154
 # float  mod (float  a, float  b) { return a - b*floor(a/b); }
@@ -57,9 +57,9 @@ code ___main___
 	floor		$tmp2 $tmp3 	%argrw{"wr"}
 	mul		$tmp4 $const2 $tmp2 	%argrw{"wrr"}
 	sub		s $tmp1 $tmp4 	%argrw{"wrr"}
-# spots.osl:9
+# spots.osl:10
 #     float t=mod(v*repeatCount,1);
-	mul		$tmp5 v repeatCount 	%filename{"spots.osl"} %line{9} %argrw{"wrr"}
+	mul		$tmp5 v repeatCount 	%filename{"spots.osl"} %line{10} %argrw{"wrr"}
 	functioncall	$const3 12 	%argrw{"r"}
 # /opt/pixar/RenderManProServer-24.4/lib/osl/include/stdosl.h:154
 # float  mod (float  a, float  b) { return a - b*floor(a/b); }
@@ -67,47 +67,47 @@ code ___main___
 	floor		$tmp6 $tmp7 	%argrw{"wr"}
 	mul		$tmp8 $const2 $tmp6 	%argrw{"wrr"}
 	sub		t $tmp5 $tmp8 	%argrw{"wrr"}
-# spots.osl:11
-#     if((float)noise("perlin",u*repeatCount,v*repeatCount)>0.7){
-	mul		$tmp10 u repeatCount 	%filename{"spots.osl"} %line{11} %argrw{"wrr"}
+# spots.osl:12
+#     if((float)noise("perlin",u*repeatCount,v*repeatCount)>pointProbability){
+	mul		$tmp10 u repeatCount 	%filename{"spots.osl"} %line{12} %argrw{"wrr"}
 	mul		$tmp11 v repeatCount 	%argrw{"wrr"}
 	noise		$tmp9 $const4 $tmp10 $tmp11 	%argrw{"wrrr"}
-	gt		$tmp12 $tmp9 $const5 	%argrw{"wrr"}
+	gt		$tmp12 $tmp9 pointProbability 	%argrw{"wrr"}
 	if		$tmp12 34 35 	%argrw{"r"}
-# spots.osl:12
+# spots.osl:13
 # 	    float fuzz=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.05;
-	mul		$tmp14 repeatCount u 	%line{12} %argrw{"wrr"}
+	mul		$tmp14 repeatCount u 	%line{13} %argrw{"wrr"}
 	mul		$tmp15 repeatCount v 	%argrw{"wrr"}
 	noise		$tmp13 $const4 $tmp14 $tmp15 	%argrw{"wrrr"}
-	mul		___325_fuzz $tmp13 $const6 	%argrw{"wrr"}
-# spots.osl:13
-#         point centre=point (0.5,0.5,0);
-	assign		___325_centre $const7 	%line{13} %argrw{"wr"}
+	mul		___325_fuzz $tmp13 $const5 	%argrw{"wrr"}
 # spots.osl:14
-#         point here=point (s,t,0);
-	point		___325_here s t $const9 	%line{14} %argrw{"wrrr"}
+#         point centre=point (0.5,0.5,0);
+	assign		___325_centre $const6 	%line{14} %argrw{"wr"}
 # spots.osl:15
-#         float dist=distance(centre,here);
-	distance	___325_dist ___325_centre ___325_here 	%line{15} %argrw{"wrr"}
+#         point here=point (s,t,0);
+	point		___325_here s t $const8 	%line{15} %argrw{"wrrr"}
 # spots.osl:16
+#         float dist=distance(centre,here);
+	distance	___325_dist ___325_centre ___325_here 	%line{16} %argrw{"wrr"}
+# spots.osl:17
 #         float radius=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.8;
-	mul		$tmp17 repeatCount u 	%line{16} %argrw{"wrr"}
+	mul		$tmp17 repeatCount u 	%line{17} %argrw{"wrr"}
 	mul		$tmp18 repeatCount v 	%argrw{"wrr"}
 	noise		$tmp16 $const4 $tmp17 $tmp18 	%argrw{"wrrr"}
-	mul		___325_radius $tmp16 $const10 	%argrw{"wrr"}
-# spots.osl:17
-#         color myColor= spotsColor;
-	assign		___325_myColor spotsColor 	%line{17} %argrw{"wr"}
+	mul		___325_radius $tmp16 $const9 	%argrw{"wrr"}
 # spots.osl:18
+#         color myColor= spotsColor;
+	assign		___325_myColor spotsColor 	%line{18} %argrw{"wr"}
+# spots.osl:19
 #         float inDisk=1-smoothstep(radius-fuzz,radius-fuzz,dist);
-	sub		$tmp20 ___325_radius ___325_fuzz 	%line{18} %argrw{"wrr"}
+	sub		$tmp20 ___325_radius ___325_fuzz 	%line{19} %argrw{"wrr"}
 	sub		$tmp21 ___325_radius ___325_fuzz 	%argrw{"wrr"}
 	smoothstep	$tmp19 $tmp20 $tmp21 ___325_dist 	%argrw{"wrrr"}
 	sub		___325_inDisk $const2 $tmp19 	%argrw{"wrr"}
-# spots.osl:19
+# spots.osl:20
 #         Cout=mix(baseColor,myColor,inDisk);
-	mix		Cout baseColor ___325_myColor ___325_inDisk 	%line{19} %argrw{"wrrr"}
-# spots.osl:22
+	mix		Cout baseColor ___325_myColor ___325_inDisk 	%line{20} %argrw{"wrrr"}
+# spots.osl:23
 # 	    Cout=baseColor;
-	assign		Cout baseColor 	%line{22} %argrw{"wr"}
+	assign		Cout baseColor 	%line{23} %argrw{"wr"}
 	end

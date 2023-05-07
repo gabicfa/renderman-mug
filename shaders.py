@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 import prman
 
-def spotCeramicShader(ri, repeatCount = 150) :
+def spotCeramicShader(ri, repeatCount = 150, pointProbability = 0.6) :
     baseColor = [colorConverter(207), colorConverter(203), colorConverter(194)]
     spotsColor = [colorConverter(26), colorConverter(26), colorConverter(23)]
     ri.Pattern("spots", "spots", {
         'color baseColor' : baseColor,
         'color spotsColor' : spotsColor,
-        'float repeatCount': repeatCount
+        'float repeatCount': repeatCount,
+        'float pointProbability': pointProbability
     })
     ri.Bxdf(
         "PxrSurface", "with_spots", {
@@ -23,7 +24,7 @@ def darkCeramicShader(ri) :
         "PxrSurface", 
         "ceramic",
         {
-            "color diffuseColor": [110/255, 93/255, 77/255], 
+            "color diffuseColor": [colorConverter(110), colorConverter(93), colorConverter(77)], 
             "float diffuseGain": 1.0, 
             "float diffuseRoughness": 0.1,
             "float diffuseExponent" : 50

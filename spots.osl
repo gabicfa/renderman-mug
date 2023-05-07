@@ -2,13 +2,14 @@ surface spots (
     color baseColor = color(1, 0, 0),
     color spotsColor = color(0,0,0),
     float repeatCount = 100,
+    float pointProbability = 0.6,
 output  color Cout=1
 )
 {
     float s=mod(u*repeatCount,1);
     float t=mod(v*repeatCount,1);
 
-    if((float)noise("perlin",u*repeatCount,v*repeatCount)>0.7){
+    if((float)noise("perlin",u*repeatCount,v*repeatCount)>pointProbability){
 	    float fuzz=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.05;
         point centre=point (0.5,0.5,0);
         point here=point (s,t,0);

@@ -198,7 +198,7 @@ def mugsHandle(ri):
     darkCeramicShader(ri)
     darkPartHandle(ri)
 
-    spotCeramicShader(ri, 9)
+    spotCeramicShader(ri, 10, 0.7)
     whitePartHandle(ri)
 
     ri.TransformEnd()

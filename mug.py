@@ -85,7 +85,7 @@ def mugsMainCylinder(ri) :
     ri.Scale(1,1,1.05)
 
     ri.TransformBegin()
-    spotCeramicShader(ri, 200)
+    spotCeramicShader(ri, 150, 0.7)
 
     ri.Cylinder(5, 4.5, 14, 360)
 
