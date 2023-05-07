@@ -1,4 +1,4 @@
-from shaders import *
+from shaders.shaders import *
 
 def darkPartHandle(ri):
     scheme = "catmull-clark"

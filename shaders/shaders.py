@@ -34,21 +34,11 @@ def darkCeramicShader(ri) :
     )
 
 def clearCeramicShader(ri) :
-    # ri.Bxdf(
-    #     "PxrSurface",
-    #     "clearCeramic",
-    #     {
-    #         # "color diffuseColor" : [.2,.5,.8], 
-    #         "color diffuseColor": [223/255, 232/255, 227/255],
-    #         "float diffuseGain": 1.0, 
-    #         # "float diffuseRoughness": 0.1,
-    #         # "float diffuseExponent" : 50,
-    #         "color clearcoatEdgeColor": [1, 1, 1],
-    #     },
-    # )
+    baseColor = [colorConverter(223), colorConverter(232), colorConverter(227)]
+
     ri.Bxdf('PxrDisney','glowinside',
     {
-        'color baseColor' : [223/255, 232/255, 227/255], 
+        'color baseColor' : baseColor, 
         'float specular' : [1], 
         'float specularTint' : [0], 
         'float anisotropic' : [1], 

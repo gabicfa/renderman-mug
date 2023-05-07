@@ -1,4 +1,4 @@
-from shaders import table
+from shaders.shaders import table
 
 def Cube(ri,width=1.0,height=1.0,depth=1.0) :
     table(ri)

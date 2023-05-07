@@ -5,8 +5,8 @@ import prman
 import sys, os.path, subprocess
 import ProcessCommandLine as cl
 
-from mug import Mug
-from table import Table
+from assets.mug import Mug 
+from assets.table import Table
 
 def checkAndCompileShader(shader):
     if (
@@ -45,8 +45,8 @@ def lighting(ri):
     ri.Light("PxrDomeLight", 
         "hdrLight", {
             "string lightColorMap": "kitchen.tex",
-            "float intensity": 1,
-            "float exposure": 0
+            "float intensity": 0.85,
+            "float exposure": -0.2
         })
     ri.AttributeEnd()
     ri.TransformEnd()
@@ -104,8 +104,8 @@ def main(
     integratorParams={},
     openProgram = "it"
 ):
-    checkAndCompileShader("spotsCeramicShader")
-    checkAndCompileShader("woodShader")
+    checkAndCompileShader("shaders/spotsCeramicShader")
+    checkAndCompileShader("shaders/woodShader")
     print("shading rate {} pivel variance {} using {} {}".format(shadingrate, pixelvar, integrator, integratorParams))
     
     ri = prman.Ri()
