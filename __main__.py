@@ -22,7 +22,7 @@ def checkAndCompileShader(shader):
 def scene(ri) :
 
     ri.TransformBegin()
-    ri.Translate(-0.5, -0.5, 2.3)
+    ri.Translate(0, -0.6, 3.3)
     ri.Rotate(-95, 1, 0, 0)
 
     ri.TransformBegin()
@@ -119,14 +119,14 @@ def main(
     ri.Integrator(integrator, "integrator", integratorParams)
     ri.ShadingRate(shadingrate)
     ri.PixelVariance(pixelvar)
-    ri.Projection(ri.PERSPECTIVE, {ri.FOV: 50})
-    ri.DepthOfField(2.2,0.055,2.5)
+    ri.Projection(ri.PERSPECTIVE, {ri.FOV: 40})
+    ri.DepthOfField(2.2,0.055,3)
     
     ri.WorldBegin()
     ri.TransformBegin()
-    ri.Translate(1,-1,1)
+    ri.Translate(0,-1,0)
     ri.Rotate(-15,1,0,0)
-    ri.Rotate(-10,0,1,0)
+    # ri.Rotate(-10,0,1,0)
     lighting(ri)
     scene(ri)
     ri.TransformEnd()

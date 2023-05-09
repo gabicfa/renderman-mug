@@ -286,7 +286,7 @@ def mugsMainCylinder(ri) :
 def Mug(ri):
     ri.TransformBegin()
     ri.Rotate(115, 0, 0, 1)
-    ri.Rotate(100, 0, 0, 1)
+    # ri.Rotate(100, 0, 0, 1)
     ri.Scale(0.1,0.1,0.1)
     mugsMainCylinder(ri) 
     mugsBottomSupport(ri)
