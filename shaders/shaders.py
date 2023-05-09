@@ -17,7 +17,7 @@ def spotCeramicShader(ri, repeatCount = 150, pointProbability = 0.6) :
             "float diffuseGain": 1.0, 
             "float diffuseRoughness": 0.1,
             "float diffuseExponent" : 50,
-            "color clearcoatEdgeColor": [1, 1, 1]
+            "color clearcoatEdgeColor": [0.7, 0.7, 0.7]
     })
 
 def darkCeramicShader(ri) :
@@ -29,7 +29,7 @@ def darkCeramicShader(ri) :
             "float diffuseGain": 1.0, 
             "float diffuseRoughness": 0.1,
             "float diffuseExponent" : 50,
-            "color clearcoatEdgeColor": [1, 1, 1]
+            "color clearcoatEdgeColor": [0.7, 0.7, 0.7]
         }
     )
 
