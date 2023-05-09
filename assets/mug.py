@@ -1,4 +1,4 @@
-from shaders.shaders import *
+from shaders.shaders import clearCeramicShader, darkCeramicShader, spotCeramicShader
 
 def darkPartHandle(ri):
     scheme = "catmull-clark"
