@@ -22,9 +22,7 @@ To render the scene, you will need to have Pixar's RenderMan installed on your m
 Once RenderMan is installed, you can run the main script to render the scene:
 
 ```
-
 python main.py
-
 ```
 
 This will generate a rendered image of the scene in the current working directory as `output.exr`.
