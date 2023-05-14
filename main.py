@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 import prman
 
-# import the python functions
+# Import required modules
 import sys, os.path, subprocess
 import ProcessCommandLine as cl
 
+# Import Mug and Table assets
 from assets.mug import Mug 
 from assets.table import Table
 
+# Check and compile shader if needed
 def checkAndCompileShader(shader):
     if (
         os.path.isfile(shader + ".oso") != True
@@ -18,9 +20,9 @@ def checkAndCompileShader(shader):
             subprocess.check_call(["oslc", shader + ".osl"])
         except subprocess.CalledProcessError:
             sys.exit("shader compilation failed")
- 
-def scene(ri) :
 
+# Define the scene with geometry and transformations
+def scene(ri) :
     ri.TransformBegin()
     ri.Translate(0, -0.6, 3.3)
     ri.Rotate(-95, 1, 0, 0)
@@ -34,7 +36,8 @@ def scene(ri) :
     ri.TransformEnd()
 
     ri.TransformEnd()
-    
+
+# Set up the lighting environment
 def lighting(ri):
     ri.TransformBegin()
     ri.AttributeBegin()
@@ -51,6 +54,7 @@ def lighting(ri):
     ri.AttributeEnd()
     ri.TransformEnd()
 
+# Set up the display channels for denoising
 def displaySetUpForDenoise(ri, openProgram = "it"):
     # Beauty...
     ri.DisplayChannel("color Ci")
@@ -104,14 +108,18 @@ def main(
     integratorParams={},
     openProgram = "it"
 ):
+    # Check and compile shaders if necessary
     checkAndCompileShader("shaders/spotsCeramicShader")
     checkAndCompileShader("shaders/woodShader")
+
     print("shading rate {} pivel variance {} using {} {}".format(shadingrate, pixelvar, integrator, integratorParams))
     
     ri = prman.Ri()
     ri.Begin(filename)
     ri.Option("searchpath", {"string texture": "./textures/:@"})
     ri.Format(width, height, 1)
+
+    # Set up display for denoising
     displaySetUpForDenoise(ri, openProgram)
 
     # setup the raytrace / integrators
@@ -123,17 +131,19 @@ def main(
     ri.DepthOfField(2.2,0.055,3)
     
     ri.WorldBegin()
+    # Set up scene transformations and lighting
     ri.TransformBegin()
     ri.Translate(0,-1,0)
     ri.Rotate(-15,1,0,0)
-    # ri.Rotate(-10,0,1,0)
     lighting(ri)
     scene(ri)
     ri.TransformEnd()
+
     ri.WorldEnd()
 
     ri.End()
 
+# Process command line arguments and call main function
 if __name__ == '__main__':
     cl.ProcessCommandLine("__main__.rib")
     main(

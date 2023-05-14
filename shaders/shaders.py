@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import prman
 
+# Ceramic shader with spots
 def spotCeramicShader(ri, repeatCount = 150, pointProbability = 0.6) :
     baseColor = [colorConverter(207), colorConverter(203), colorConverter(194)]
     spotsColor = [colorConverter(26), colorConverter(26), colorConverter(23)]
@@ -20,6 +21,7 @@ def spotCeramicShader(ri, repeatCount = 150, pointProbability = 0.6) :
             "color clearcoatEdgeColor": [0.7, 0.7, 0.7]
     })
 
+# Dark ceramic shader
 def darkCeramicShader(ri) :
     ri.Bxdf(
         "PxrSurface", 
@@ -33,6 +35,7 @@ def darkCeramicShader(ri) :
         }
     )
 
+# Clear ceramic shader
 def clearCeramicShader(ri) :
     baseColor = [colorConverter(223), colorConverter(232), colorConverter(227)]
 
@@ -46,14 +49,17 @@ def clearCeramicShader(ri) :
         'float clearcoat' : [1]
     })
 
+# Table shader with wood pattern
 def table(ri) :
     ri.Pattern('wood','wood', {})
     ri.Bxdf('PxrSurface', 'woodtable',
-	{
-		'reference color diffuseColor' : ['wood:Cout'],
+    {
+        'reference color diffuseColor' : ['wood:Cout'],
         "float diffuseGain": 1.0, 
         "float diffuseRoughness": 0.3,
         "float diffuseExponent" : 30
-	})
+    })
+
+# Convert color values from 0-255 to 0-1 range
 def colorConverter(colourValue) :
-	return colourValue / 255
+    return colourValue / 255

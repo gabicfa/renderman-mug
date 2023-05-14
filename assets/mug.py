@@ -188,7 +188,7 @@ def whitePartHandle(ri):
     
     ri.HierarchicalSubdivisionMesh(scheme, nfaces, nvertices, tags, nargs, intargs, floatargs, stringargs, {ri.P:points, 'facevarying float[2] st':stValues} )
 
-
+# Function to create the handle of the mug
 def mugsHandle(ri):
     ri.ArchiveRecord(ri.COMMENT, 'handle')
     ri.TransformBegin() 
@@ -196,25 +196,30 @@ def mugsHandle(ri):
     ri.Rotate(90,1,0,0)
     ri.Translate(0,3.6,0.25)
     
+    # Apply dark ceramic shader to the handle
     darkCeramicShader(ri)
     darkPartHandle(ri)
 
+    # Apply spot ceramic shader to the handle
     spotCeramicShader(ri, 10, 0.7)
     whitePartHandle(ri)
 
     ri.TransformEnd()
 
+# Function to create the bottom support of the mug
 def mugsBottomSupport(ri):
     # ----- OUTSIDE ------
     ri.TransformBegin()
     ri.Translate(0, 0, -4.31)
     ri.ArchiveRecord(ri.COMMENT, 'bottom_suport_oustide')
 
+    # Apply dark ceramic shader to the outside bottom support
     darkCeramicShader(ri)
     ri.Paraboloid(5.06, 4.8, 4.0, -360)
 
     # ----- INSIDE ------
     ri.ArchiveRecord(ri.COMMENT, 'bottom_suport_inside')
+    # Apply clear ceramic shader to the inside bottom support
     clearCeramicShader(ri)
     ri.Paraboloid(5.05, 5.3, 4.1, 360)
     ri.Disk(4.5, 4.9, 360)
@@ -243,6 +248,7 @@ def mugsBottomSupport(ri):
     ri.Disk(0.15, 4, -360)
     ri.TransformEnd()
 
+# Function to create the main cylindrical body of the mug
 def mugsMainCylinder(ri) :
     # ----- OUTSIDE - TOP ------
     ri.TransformBegin()
@@ -250,6 +256,7 @@ def mugsMainCylinder(ri) :
     ri.Scale(1,1,1.05)
 
     ri.TransformBegin()
+    # Apply spot ceramic shader to the top outside part of the cylinder
     spotCeramicShader(ri, 150, 0.7)
 
     ri.Cylinder(5, 4.5, 14, 360)
@@ -257,6 +264,7 @@ def mugsMainCylinder(ri) :
     # ----- INSIDE ------
     ri.Attribute("identifier", {"name": "inside"})
 
+    # Apply clear ceramic shader to the inside of the cylinder
     clearCeramicShader(ri)
     ri.Cylinder(4.8, 0.5, 13.95, -360)
 
@@ -283,6 +291,7 @@ def mugsMainCylinder(ri) :
     ri.TransformEnd()
     ri.TransformEnd()
 
+# Main function to create the complete mug with handle, bottom support, and main cylinder
 def Mug(ri):
     ri.TransformBegin()
     ri.Rotate(115, 0, 0, 1)

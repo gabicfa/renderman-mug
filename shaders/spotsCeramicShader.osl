@@ -1,24 +1,27 @@
+// Spots Ceramic shader with noise-based spots pattern
 surface spotsCeramic (
-    color baseColor = color(1, 0, 0),
-    color spotsColor = color(0,0,0),
-    float repeatCount = 100,
-    float pointProbability = 0.6,
-output  color Cout=1
+    color baseColor = color(1, 0, 0),     // Base color of the ceramic material
+    color spotsColor = color(0, 0, 0),    // Color of the spots
+    float repeatCount = 100,              // Controls the number of spots across the surface
+    float pointProbability = 0.6,         // Probability for a point to be a spot
+    output color Cout = 1                 // Output color
 )
 {
-    float s=mod(u*repeatCount,1);
-    float t=mod(v*repeatCount,1);
+    float s = mod(u * repeatCount, 1);   // Calculate the s coordinate for the noise function
+    float t = mod(v * repeatCount, 1);   // Calculate the t coordinate for the noise function
 
-    if((float)noise("perlin",u*repeatCount,v*repeatCount)>pointProbability){
-	    float fuzz=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.05;
-        point centre=point (0.5,0.5,0);
-        point here=point (s,t,0);
-        float dist=distance(centre,here);
-        float radius=(float) noise("perlin",repeatCount*u,repeatCount*v)*0.8;
-        color myColor= spotsColor;
-        float inDisk=1-smoothstep(radius-fuzz,radius-fuzz,dist);
-        Cout=mix(baseColor,myColor,inDisk);
+    // If the Perlin noise value at (u, v) is greater than pointProbability, create a spot
+    if ((float)noise("perlin", u * repeatCount, v * repeatCount) > pointProbability) {
+        float fuzz = (float) noise("perlin", repeatCount * u, repeatCount * v) * 0.05; // Fuzziness of the spot edges
+        point centre = point(0.5, 0.5, 0); // Center of the spot
+        point here = point(s, t, 0);       // Current point on the surface
+        float dist = distance(centre, here); // Distance between the current point and the center of the spot
+        float radius = (float) noise("perlin", repeatCount * u, repeatCount * v) * 0.8; // Radius of the spot
+        color myColor = spotsColor; // Set the spot color
+        float inDisk = 1 - smoothstep(radius - fuzz, radius - fuzz, dist); // Calculate the spot area with smooth edges
+        Cout = mix(baseColor, myColor, inDisk); // Mix the base color and the spot color based on the spot area
     }
-    else
-	    Cout=baseColor;
+    else {
+        Cout = baseColor; // If not in a spot, set the output color to the base color
+    }
 }
