@@ -232,7 +232,6 @@ def mugsBottomSupport(ri):
     ri.Scale(1,1,0.1)
     ri.Translate(0,0,-2.8)
 
-    # --- CERAMIC SHADER
     ri.Bxdf("PxrDiffuse", "bxdf", {"color diffuseColor": [0.95, 0.95, 0.95]})
     ri.Torus(4.33, 0.3, 0, -180, 360)
     ri.TransformEnd()
@@ -256,7 +255,6 @@ def mugsMainCylinder(ri) :
     ri.Scale(1,1,1.05)
 
     ri.TransformBegin()
-    # Apply spot ceramic shader to the top outside part of the cylinder
     spotCeramicShader(ri, 150, 0.7)
 
     ri.Cylinder(5, 4.5, 14, 360)
@@ -264,7 +262,6 @@ def mugsMainCylinder(ri) :
     # ----- INSIDE ------
     ri.Attribute("identifier", {"name": "inside"})
 
-    # Apply clear ceramic shader to the inside of the cylinder
     clearCeramicShader(ri)
     ri.Cylinder(4.8, 0.5, 13.95, -360)
 
@@ -295,7 +292,6 @@ def mugsMainCylinder(ri) :
 def Mug(ri):
     ri.TransformBegin()
     ri.Rotate(115, 0, 0, 1)
-    # ri.Rotate(100, 0, 0, 1)
     ri.Scale(0.1,0.1,0.1)
     mugsMainCylinder(ri) 
     mugsBottomSupport(ri)
