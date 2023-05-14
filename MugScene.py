@@ -90,7 +90,7 @@ def displaySetUpForDenoise(ri, openProgram = "it"):
     ri.DisplayChannel("vector forward", {"string source": "vector motionFore"})
     ri.DisplayChannel("vector backward", {"string source": "vector motionBack"})
     ri.Display(
-        "output.exr",
+        "MugScene.exr",
         openProgram,
         "Ci,a,mse,albedo,albedo_var,diffuse,diffuse_mse,specular,specular_mse,zfiltered,zfiltered_var,normal,normal_var,forward,backward",
         {"int asrgba": [1]},
@@ -145,7 +145,7 @@ def main(
 
 # Process command line arguments and call main function
 if __name__ == '__main__':
-    cl.ProcessCommandLine("main.rib")
+    cl.ProcessCommandLine("MugScene.rib")
     main(
         cl.filename,
         cl.args.shadingrate,
