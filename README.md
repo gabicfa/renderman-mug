@@ -37,7 +37,7 @@ denoise output.exr
 it output_filtered.exr
 ```
 
-This will create a new file named output_denoised.exr containing the denoised image.
+This will create a new file named output_filtered.exr containing the denoised image.
 
 ## Customization
 
