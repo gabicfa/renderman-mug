@@ -90,7 +90,7 @@ def displaySetUpForDenoise(ri, openProgram = "it"):
     ri.DisplayChannel("vector forward", {"string source": "vector motionFore"})
     ri.DisplayChannel("vector backward", {"string source": "vector motionBack"})
     ri.Display(
-        "__main__.exr",
+        "output.exr",
         openProgram,
         "Ci,a,mse,albedo,albedo_var,diffuse,diffuse_mse,specular,specular_mse,zfiltered,zfiltered_var,normal,normal_var,forward,backward",
         {"int asrgba": [1]},
@@ -127,7 +127,7 @@ def main(
     ri.Integrator(integrator, "integrator", integratorParams)
     ri.ShadingRate(shadingrate)
     ri.PixelVariance(pixelvar)
-    ri.Projection(ri.PERSPECTIVE, {ri.FOV: 40})
+    ri.Projection(ri.PERSPECTIVE, {ri.FOV: fov})
     ri.DepthOfField(2.2,0.055,3)
     
     ri.WorldBegin()
@@ -145,7 +145,7 @@ def main(
 
 # Process command line arguments and call main function
 if __name__ == '__main__':
-    cl.ProcessCommandLine("__main__.rib")
+    cl.ProcessCommandLine("main.rib")
     main(
         cl.filename,
         cl.args.shadingrate,
