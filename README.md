@@ -1,4 +1,4 @@
-# Realistic Mug and Table Scene
+# Realistic Mug Scene
 
 This repository contains a Python script to generate a realistic 3D scene featuring a mug and a table using Pixar's RenderMan Interface. The code is organized into several Python scripts and shader files that define the geometry, shaders, and rendering attributes for the mug, table, and the scene's environment.
 
