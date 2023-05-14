@@ -9,9 +9,9 @@ This repository contains a Python script to generate a realistic 3D scene featur
 The repository is organized as follows:
 
 1. `main.py`: The main Python script that sets up the scene, including the camera, light sources, and objects (mug and table), and renders the scene using RenderMan.
-2. `shaders/shaders.py`: A collection of custom shaders for the mug and table.
-3. `shaders/spotsCeramicShader.osl`: An Open Shading Language (OSL) shader for creating a spotted ceramic material.
-4. `shaders/woodShader.osl`: An OSL shader for creating a wood material.
+2. `/shaders/shaders.py`: A collection of custom shaders for the mug and table.
+3. `/shaders/spotsCeramicShader.osl`: An Open Shading Language (OSL) shader for creating a spotted ceramic material.
+4. `/shaders/woodShader.osl`: An OSL shader for creating a wood material.
 5. `/assets/mug.py`: A Python script that defines the geometry and shading for the mug using the custom shaders.
 6. `/assets/table.py`: A Python script that defines the geometry and shading for the table using the custom shaders.
 
