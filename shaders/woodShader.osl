@@ -4,6 +4,5 @@ shader wood(
     output  color Cout=0     // Output color
 )
 {
-    // Sample the wood texture at the given (u, v) coordinates and set the output color
     Cout=(color)texture("wood.tex", u, v);
 }
